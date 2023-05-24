@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "autocapt"
+version = "0.1.0"
+description = ""
+authors = ["jackgutheim <jack.gutheim@quantfive.org>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+numpy = "^1.24.3"
+whisper = "^1.1.10"
+matplotlib = "^3.7.1"
+moviepy = "^1.0.3"
+pymupdf = "^1.22.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
