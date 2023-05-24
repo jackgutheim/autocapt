@@ -9,54 +9,30 @@ from moviepy.editor import *
 import whisper_timestamped as whisper
 
 type = "mp3"
-filename, ext = os.path.splitext(".venv/Test_Movie_Audio.mp4")
-clip = VideoFileClip(".venv/Test_Movie_Audio.mp4")
+filename, ext = os.path.splitext("src/Michael_Owen.mp4")
+clip = VideoFileClip("src/Michael_Owen.mp4")
 clip.audio.write_audiofile(f"{filename}.{type}")
 
-# start_time = datetime.datetime.now()
-# model = whisper.load_model("base")
-# result = model.transcribe(".venv/Test_Movie_Audio.mp3")
-# end_time = datetime.datetime.now()
-
-# ///
-audio = whisper.load_audio(".venv/Test_Movie_Audio.mp3")
+audio = whisper.load_audio("src/Michael_Owen.mp3")
 model = whisper.load_model("base", device="cpu")
 result = whisper.transcribe(model, audio, language="en")
-
-# print(json.dumps(result1, indent=2, ensure_ascii=False))
-
-
-# print({"start_time": start_time})
-# print({"end_time": end_time})
-# print({"diff": (end_time - start_time)})
 
 segments = result["segments"]
 words = segments[0]["words"]
 print(words)
-with open("data.py", "w") as f:
+with open("src/data.py", "w") as f:
     f.write(json.dumps(result))
 
 txt_clips = []
 for text in words:
-    txt_clip = TextClip(text["text"], fontsize=50, color="blue")
+    txt_clip = TextClip(text["text"], fontsize=70, color="red")
     txt_clip = (
-        txt_clip.set_position((100, 900))
+        txt_clip.set_position((500, 750))
         .set_start(text["start"])
         .set_duration(text["end"] - text["start"])
     )
     txt_clips.append(txt_clip)
 
-
-# clip = VideoFileClip(".venv/Test_Movie_Audio.mp4")
-
-# Generate a text clip
-# txt_clip = TextClip(result["text"], fontsize=20, color="blue")
-
-# setting position of text in the center and duration will be 10 seconds
-# txt_clip = txt_clip.set_position((0.5, 900)).set_duration(1)
-
-
-# Overlay the text clip on the first video clip
 video = CompositeVideoClip(
     [
         clip,
@@ -69,40 +45,36 @@ video = CompositeVideoClip(
         txt_clips[6],
         txt_clips[7],
         txt_clips[8],
+        txt_clips[9],
+        txt_clips[10],
+        txt_clips[11],
+        txt_clips[12],
+        txt_clips[13],
+        txt_clips[14],
+        txt_clips[15],
+        txt_clips[16],
+        txt_clips[17],
+        txt_clips[18],
+        txt_clips[19],
+        txt_clips[20],
+        txt_clips[21],
+        txt_clips[22],
+        txt_clips[23],
+        txt_clips[24],
+        txt_clips[25],
+        txt_clips[26],
+        txt_clips[27],
+        txt_clips[28],
+        txt_clips[29],
+        txt_clips[30],
     ]
 )
 
-# showing video
 video.write_videofile(
-    "New_Test_Movie_Audio.mp4",
+    "src/Output_File.mp4",
     codec="libx264",
     bitrate=str(numpy.power(10, 7)),
     verbose=False,
     audio=False,
     ffmpeg_params=["-pix_fmt", "yuv420p"],
 )
-
-
-# cap = cv2.VideoCapture(".venv/Test_Movie_Audio.mp4")
-
-# while cap.isOpened():
-#     success, frame = cap.read()
-#     if not success:
-#         break
-#     frame = cv2.resize(frame, (600, 400))
-#     cv2.putText(
-#         frame,
-#         result["text"],
-#         (0, 350),
-#         cv2.FONT_HERSHEY_SIMPLEX,
-#         0.7,
-#         (255, 50, 50),
-#         3,
-#     )
-#     cv2.imshow("vid", frame)
-
-#     if cv2.waitKey(1) & 0xFF == ord("q"):
-#         break
-
-# cap.release()
-# cv2.destroyAllWindows()
