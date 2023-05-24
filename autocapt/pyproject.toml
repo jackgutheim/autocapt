@@ -12,6 +12,7 @@ whisper = "^1.1.10"
 matplotlib = "^3.7.1"
 moviepy = "^1.0.3"
 pymupdf = "^1.22.3"
+whisper_timestamped = { git = "https://github.com/linto-ai/whisper-timestamped"}
 
 
 [build-system]
