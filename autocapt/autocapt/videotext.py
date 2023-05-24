@@ -8,21 +8,21 @@ from moviepy.editor import *
 import whisper_timestamped as whisper
 
 # Change this based on which video you would like to process
-video_name = "src/Michael_Owen"
+video_name = "autocapt/Michael_Owen"
 
 type = "mp3"
 filename, ext = os.path.splitext(video_name + ".mp4")
 clip = VideoFileClip(video_name + ".mp4")
 clip.audio.write_audiofile(f"{filename}.{type}")
 
-audio = whisper.load_audio(video_name + "mp3")
+audio = whisper.load_audio(video_name + ".mp3")
 model = whisper.load_model("base", device="cpu")
 result = whisper.transcribe(model, audio, language="en")
 
 segments = result["segments"]
 words = segments[0]["words"]
 print(words)
-with open("src/data.py", "w") as f:
+with open("autocapt/data.py", "w") as f:
     f.write(json.dumps(result))
 
 txt_clips = []
@@ -73,7 +73,7 @@ video = CompositeVideoClip(
 )
 
 video.write_videofile(
-    "src/Output_File.mp4",
+    "autocapt/Output_File.mp4",
     codec="libx264",
     bitrate=str(numpy.power(10, 7)),
     verbose=False,
