@@ -1,0 +1,5 @@
+moviepy==1.0.3
+numpy==1.24.3
+openai_whisper==20230314
+whisper_timestamped==1.12.20
+triton==2.0.0
