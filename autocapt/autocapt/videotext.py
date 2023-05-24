@@ -7,12 +7,15 @@ import datetime
 from moviepy.editor import *
 import whisper_timestamped as whisper
 
+# Change this based on which video you would like to process
+video_name = "src/Michael_Owen"
+
 type = "mp3"
-filename, ext = os.path.splitext("src/Michael_Owen.mp4")
-clip = VideoFileClip("src/Michael_Owen.mp4")
+filename, ext = os.path.splitext(video_name + ".mp4")
+clip = VideoFileClip(video_name + ".mp4")
 clip.audio.write_audiofile(f"{filename}.{type}")
 
-audio = whisper.load_audio("src/Michael_Owen.mp3")
+audio = whisper.load_audio(video_name + "mp3")
 model = whisper.load_model("base", device="cpu")
 result = whisper.transcribe(model, audio, language="en")
 
