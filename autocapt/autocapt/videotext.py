@@ -29,7 +29,7 @@ txt_clips = []
 for text in words:
     txt_clip = TextClip(text["text"], fontsize=70, color="red")
     txt_clip = (
-        txt_clip.set_position((500, 750))
+        txt_clip.set_position((0.4,0.9), relative=True)
         .set_start(text["start"])
         .set_duration(text["end"] - text["start"])
     )
