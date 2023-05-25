@@ -19,25 +19,28 @@ audio = whisper.load_audio(video_name + ".mp3")
 model = whisper.load_model("base", device="cpu")
 result = whisper.transcribe(model, audio, language="en")
 
-segments = result["segments"]
-words = segments[0]["words"]
-print(words)
+
 with open("autocapt/data.py", "w") as f:
     f.write(json.dumps(result))
 
+segments = result["segments"]
 txt_clips = []
-for text in words:
-    txt_clip = TextClip(text["text"], fontsize=70, color="red")
-    txt_clip = (
-        txt_clip.set_position((0.4,0.9), relative=True)
-        .set_start(text["start"])
-        .set_duration(text["end"] - text["start"])
-    )
-    txt_clips.append(txt_clip)
 
-    composite_list = []
-    composite_list.append(clip)
-    composite_list.extend(txt_clips)
+for i in range(len(segments)):
+    words = segments[i]["words"]
+    print(words)
+    for text in words:
+        txt_clip = TextClip(text["text"], fontsize=70, color="red")
+        txt_clip = (
+            txt_clip.set_position((0.4,0.8), relative=True)
+            .set_start(text["start"])
+            .set_duration(text["end"] - text["start"])
+        )
+        txt_clips.append(txt_clip)
+
+composite_list = []
+composite_list.append(clip)
+composite_list.extend(txt_clips)
 
 video = CompositeVideoClip(
     composite_list
