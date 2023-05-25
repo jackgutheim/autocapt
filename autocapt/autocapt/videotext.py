@@ -7,11 +7,14 @@ import datetime
 from moviepy.editor import *
 import whisper_timestamped as whisper
 
-# Change this based on which video you would like to process
+# Name of video to be processed
 video_name = "autocapt/Michael_Owen"
 
-# How many words you want per caption section
-caption_grouping = 3
+# Number of words per caption section
+caption_grouping = 4
+
+# Caption Font Size
+font_size = 70
 
 type = "mp3"
 filename, ext = os.path.splitext(video_name + ".mp4")
@@ -31,26 +34,30 @@ txt_clips = []
 
 for i in range(len(segments)):
     words = segments[i]["words"]
-    j = 0
-    last_run = False
     num_words = len(words)
-    while(j < num_words):
+    j = 0
+    final_chunk = 0
+    last_run = False
 
-        text_string = ""
-        last_few = num_words - j
+    while(j < num_words):
         
         if (j + caption_grouping) > num_words:
+            final_chunk = num_words - j
             last_run = True
 
-        for x in range(last_few if last_run else caption_grouping):
+        text_string = ""
+        for x in range(final_chunk if last_run else caption_grouping):
                 text_string = text_string + str(words[j + x]["text"]) + " "
 
-        txt_clip = TextClip(text_string, fontsize=50, color="red", align='center')
-        txt_clip = (
-            txt_clip.set_position((0.35,0.8), relative=True)
-            .set_start(words[j]["start"])
-            .set_duration(words[j + ((last_few if last_run else caption_grouping) - 1)]["end"] - words[j]["start"])
-        )
+        txt_clip = TextClip(text_string, fontsize=font_size, color="red")
+        txt_clip = txt_clip.set_start(
+             words[j]["start"]
+             ).set_duration(
+                  words[j + ((final_chunk if last_run else caption_grouping) - 1)]["end"] - words[j]["start"]
+                  ).set_position(
+                       ("center", "bottom")
+                       )
+
         txt_clips.append(txt_clip)
         if (j + caption_grouping) <= num_words:
             j += caption_grouping
