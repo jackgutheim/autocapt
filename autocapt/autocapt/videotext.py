@@ -10,6 +10,9 @@ import whisper_timestamped as whisper
 # Change this based on which video you would like to process
 video_name = "autocapt/Michael_Owen"
 
+# How many words you want per caption section
+caption_grouping = 3
+
 type = "mp3"
 filename, ext = os.path.splitext(video_name + ".mp4")
 clip = VideoFileClip(video_name + ".mp4")
@@ -28,15 +31,31 @@ txt_clips = []
 
 for i in range(len(segments)):
     words = segments[i]["words"]
-    print(words)
-    for text in words:
-        txt_clip = TextClip(text["text"], fontsize=70, color="red")
+    j = 0
+    last_run = False
+    num_words = len(words)
+    while(j < num_words):
+
+        text_string = ""
+        last_few = num_words - j
+        
+        if (j + caption_grouping) > num_words:
+            last_run = True
+
+        for x in range(last_few if last_run else caption_grouping):
+                text_string = text_string + str(words[j + x]["text"]) + " "
+
+        txt_clip = TextClip(text_string, fontsize=50, color="red", align='center')
         txt_clip = (
-            txt_clip.set_position((0.4,0.8), relative=True)
-            .set_start(text["start"])
-            .set_duration(text["end"] - text["start"])
+            txt_clip.set_position((0.35,0.8), relative=True)
+            .set_start(words[j]["start"])
+            .set_duration(words[j + ((last_few if last_run else caption_grouping) - 1)]["end"] - words[j]["start"])
         )
         txt_clips.append(txt_clip)
+        if (j + caption_grouping) <= num_words:
+            j += caption_grouping
+        if last_run:
+            break
 
 composite_list = []
 composite_list.append(clip)
