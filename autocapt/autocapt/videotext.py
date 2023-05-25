@@ -8,7 +8,7 @@ from moviepy.editor import *
 import whisper_timestamped as whisper
 
 # Change this based on which video you would like to process
-video_name = "autocapt/macdemarco"
+video_name = "autocapt/Michael_Owen"
 
 # How many words you want per caption section
 caption_grouping = 3
@@ -31,8 +31,6 @@ txt_clips = []
 
 for i in range(len(segments)):
     words = segments[i]["words"]
-    # print(words)
-    # for j in range(len(words) - 1):
     j = 0
     while(j < len(words)):
 
@@ -63,7 +61,7 @@ for i in range(len(segments)):
             .set_duration(words[j + (caption_grouping - 1)]["end"] - words[j]["start"])
         )
         txt_clips.append(txt_clip)
-        if (j + caption_grouping) < len(words):
+        if (j + caption_grouping) <= len(words):
             j += caption_grouping
         if last_run:
             break
