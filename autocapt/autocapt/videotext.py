@@ -32,36 +32,27 @@ txt_clips = []
 for i in range(len(segments)):
     words = segments[i]["words"]
     j = 0
-    while(j < len(words)):
+    last_run = False
+    num_words = len(words)
+    while(j < num_words):
 
         text_string = ""
-        last_few = 0
-        last_run = False
-
-        if (j + caption_grouping) > len(words):
-            last_few = len(words) - j
+        last_few = num_words - j
+        
+        if (j + caption_grouping) > num_words:
             last_run = True
-            for x in range(last_few):
-                text_string = text_string + str(words[j + x]["text"]) + " "
-        else:
-            for x in range(caption_grouping):
+
+        for x in range(last_few if last_run else caption_grouping):
                 text_string = text_string + str(words[j + x]["text"]) + " "
 
-        txt_clip = TextClip(text_string, fontsize=70, color="red")
-        if last_run:
-            txt_clip = (
-            txt_clip.set_position((0.4,0.8), relative=True)
+        txt_clip = TextClip(text_string, fontsize=50, color="red", align='center')
+        txt_clip = (
+            txt_clip.set_position((0.35,0.8), relative=True)
             .set_start(words[j]["start"])
-            .set_duration(words[j + (last_few - 1)]["end"] - words[j]["start"])
-        )
-        else:
-            txt_clip = (
-            txt_clip.set_position((0.4,0.8), relative=True)
-            .set_start(words[j]["start"])
-            .set_duration(words[j + (caption_grouping - 1)]["end"] - words[j]["start"])
+            .set_duration(words[j + ((last_few if last_run else caption_grouping) - 1)]["end"] - words[j]["start"])
         )
         txt_clips.append(txt_clip)
-        if (j + caption_grouping) <= len(words):
+        if (j + caption_grouping) <= num_words:
             j += caption_grouping
         if last_run:
             break
