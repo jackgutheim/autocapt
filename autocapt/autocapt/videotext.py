@@ -75,6 +75,7 @@ video = CompositeVideoClip(
 video.write_videofile(
     "autocapt/Output_File.mp4",
     codec="libx264",
+    audio_codec='aac',
     bitrate=str(numpy.power(10, 7)),
     verbose=False,
     audio=True,
