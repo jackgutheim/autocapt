@@ -13,8 +13,11 @@ video_name = "autocapt/Michael_Owen"
 # Number of words per caption section
 caption_grouping = 4
 
+# Number of seconds per caption chunk
+caption_time = 1
+
 # Caption Font Size
-font_size = 70
+font_size = 50
 
 type = "mp3"
 filename, ext = os.path.splitext(video_name + ".mp4")
@@ -32,6 +35,8 @@ with open("autocapt/data.py", "w") as f:
 segments = result["segments"]
 txt_clips = []
 
+timer = 0
+
 for i in range(len(segments)):
     words = segments[i]["words"]
     num_words = len(words)
@@ -40,29 +45,31 @@ for i in range(len(segments)):
     last_run = False
 
     while(j < num_words):
-        
-        if (j + caption_grouping) > num_words:
-            final_chunk = num_words - j
-            last_run = True
-
+        remaining_time = caption_time
         text_string = ""
-        for x in range(final_chunk if last_run else caption_grouping):
-                text_string = text_string + str(words[j + x]["text"]) + " "
+
+
+        first_word = words[j]
+        start_time = first_word["start"]
+        while remaining_time > 0 and j < num_words:
+             curr_word = words[j]
+             word_length = curr_word["end"] - curr_word["start"]
+             
+             text_string = text_string + str(curr_word["text"]) + " "
+             remaining_time = remaining_time - word_length
+             j += 1
 
         txt_clip = TextClip(text_string, fontsize=font_size, color="red")
         txt_clip = txt_clip.set_start(
-             words[j]["start"]
+            timer
              ).set_duration(
-                  words[j + ((final_chunk if last_run else caption_grouping) - 1)]["end"] - words[j]["start"]
+                caption_time
                   ).set_position(
                        ("center", "bottom")
                        )
 
         txt_clips.append(txt_clip)
-        if (j + caption_grouping) <= num_words:
-            j += caption_grouping
-        if last_run:
-            break
+        timer += caption_time
 
 composite_list = []
 composite_list.append(clip)
