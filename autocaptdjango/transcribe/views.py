@@ -29,7 +29,7 @@ def transcribe(request):
     language = request.data['language']
 
     type = "mp3"
-    filename = "Michael_Owen"
+    filename = video.name.split('.')[0]
     clip = VideoFileClip(video.temporary_file_path())
     clip.audio.write_audiofile(f"{filename}.{type}")
 
