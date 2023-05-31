@@ -26,6 +26,7 @@ from django.views.decorators.csrf import csrf_exempt
 @renderer_classes((JSONRenderer,))
 def transcribe(request):
     video = request.data['videofile']
+    language = request.data['language']
 
     type = "mp3"
     filename = "Michael_Owen"
@@ -34,7 +35,7 @@ def transcribe(request):
 
     audio = whisper.load_audio(filename + ".mp3")
     model = whisper.load_model("base", device="cpu")
-    result = whisper.transcribe(model, audio, language="en")
+    result = whisper.transcribe(model, audio, language)
 
     os.remove("./" + filename + ".mp3")
 
